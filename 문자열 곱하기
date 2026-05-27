@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+char* solution(const char* my_string, int k) {
+    
+    int len = strlen(my_string);
+    
+    char* answer = (char*)malloc(sizeof (char) * (len * k +1));
+    
+    answer[0] = '\0';
+
+    for (int i = 0; i < k; i++){
+        strcat(answer, my_string);
+    }
+
+    return answer;
+}
+
+strcat은 작동을 "기존 문자열의 끝" 을 추적하며 이어가기 때문에 해당 for 함수 중괄호 내에서 [i]로 계속 위치 지정을 해주면 로직이 꼬인다.
