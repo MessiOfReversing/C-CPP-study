@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+char* solution(const char* arr[], size_t arr_len) {
+   
+    char* answer = (char*)malloc((arr_len + 1) * sizeof(char));
+
+sizeof(char)로 캐릭터 하나당의 크기만큼 배열 길이 + null 공간 확보
+
+    for (size_t i = 0; i < arr_len; i++) {
+
+i 0부터 길이만큼 늘리면서
+
+        answer[i] = arr[i][0]; 
+
+이건 i번째 문자열에서 첫글자씩만 빼와서 answer의 각 i칸마다 채워넣자는 의미.
+[i][0]에서 [i]는 데이터타입이 char, 즉 문자
+[0]은 데이터 타입이 char*, 즉 문자 각각의 주소
+
+    }
+    
+    answer[arr_len] = '\0';
+    
+    return answer;
+}
