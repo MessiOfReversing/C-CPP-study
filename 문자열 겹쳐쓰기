@@ -1,0 +1,106 @@
+// 1번 방법
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+char* solution(const char* my_string, const char* overwrite_string, int s) {
+    char* answer = (char*)malloc(strlen(my_string) + 1);
+    int index = 0; 
+    
+    for(int i = 0; i < s; i++) {
+        answer[index++] = my_string[i];
+    }
+    
+이렇게 my string에서 my string[0] 즉 첫째 캐릭터부터 my string[s], 즉 s-1 번째 캐릭터를 받고 answer에 집어넣는 방식
+i++ 통해서 계속 증가시킨 값을 answer[]에 넣어줘야하니 내부 인자도 같이 증가하면서 증가하는 만큼 매번 할당 받아주도록 index++로 적어줘야함.
+
+
+    for(int i = 0; i < strlen(overwrite_string); i++) {
+        answer[index++] = overwrite_string[i];
+    }
+
+그 뒤로 붙일 overwrite string인데, 이건 통째로 갖다 넣어야 하니까 0부터 길이만큼 넣어줘야함.
+
+    for(int i = s + strlen(overwrite_string); i < strlen(my_string); i++) {
+        answer[index++] = my_string[i];
+    }
+overwrite string 추가한 뒤에도 남는 my string 캐릭터가 있다면 그게 출력되도록함.
+
+    
+    answer[index] = '\0';
+문자열이 끝나는곳에 null이 들어가도록 해줌
+
+    return answer;
+완성한 answer을 반환시키면 완성.
+}
+//
+
+
+
+
+
+
+// 2번 방법
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// 파라미터로 주어지는 문자열은 const로 주어집니다. 변경하려면 문자열을 복사해서 사용하세요.
+char* solution(const char* my_string, const char* overwrite_string, int s) {
+    // return 값은 malloc 등 동적 할당을 사용해주세요. 할당 길이는 상황에 맞게 변경해주세요.
+
+    int len = strlen(my_string);
+    char* answer = (char*)malloc(len + 1);
+
+    strcpy(answer, my_string);
+
+    len = strlen(overwrite_string);
+    memcpy(&answer[s], overwrite_string, len);
+ return answer;
+}
+// 
+
+이게 프로그래머스 문제에서 가장 위에 있던 풀이였는데, memcpy를 사용했음.
+len = strlen(overwrite_string);
+memcpy(&answer[s], overwrite_string, len);
+에서 &answer[s]는 s번째 인덱스 글자가 있는 곳의 주소, 즉 "여기서부터 overwrite string을 len만큼 적어라" 라는 의미.
+
+char* answer = (char*)malloc(len + 1);에서는 malloc으로 len에 null자리까지 감안한 len + 1만큼 동적할당. 공간 마련하고서 char*로 그것이 캐릭터 공간임을 적어두는 것. char* answer를 통해서 answer라는 포인터 선언한것. 
+
+
+
+
+
+// 3번 방법
+char* solution(const char* my_string, const char* overwrite_string, int s) {
+    int my_len = strlen(my_string);
+    int over_len = strlen(overwrite_string);
+    
+    char* answer = (char*)malloc(my_len + 1);
+    
+    // 1. s 전까지는 원래 문자 그대로 복사
+    for(int i = 0; i < s; i++) {
+        answer[i] = my_string[i];
+    }
+    
+    // 2. s부터는 overwrite_string을 복사
+    for(int i = 0; i < over_len; i++) {
+        answer[s + i] = overwrite_string[i];
+    }
+    
+    // 3. overwrite_string이 끝난 지점부터 나머지 원래 문자 복사
+    for(int i = s + over_len; i < my_len; i++) {
+        answer[i] = my_string[i];
+    }
+    
+    // 문자열의 끝을 알리는 널 문자('\0')를 반드시 넣어줍니다.
+    answer[my_len] = '\0'; 
+    
+    return answer;
+}
+//
+
+
+
+
+2번이 가장 좋은듯
