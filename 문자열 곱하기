@@ -19,3 +19,34 @@ char* solution(const char* my_string, int k) {
 }
 
 strcat은 작동을 "기존 문자열의 끝" 을 추적하며 이어가기 때문에 해당 for 함수 중괄호 내에서 [i]로 계속 위치 지정을 해주면 로직이 꼬인다.
+
+// 다른풀이 //
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// 파라미터로 주어지는 문자열은 const로 주어집니다. 변경하려면 문자열을 복사해서 사용하세요.
+char* solution(const char* my_string, int k) {
+    // return 값은 malloc 등 동적 할당을 사용해주세요. 할당 길이는 상황에 맞게 변경해주세요.
+    int i = 0;
+    while (my_string[i])
+        i++;
+    char* answer = (char*)malloc(i * k + 1);
+    int j = 0;
+    int p;
+    while (j < k)
+    {
+        p = 0;
+        while (p < i)
+        {
+            answer[j * i + p] = my_string[p];
+            p++;
+        }
+        j++;
+    }
+    answer[i*k + 1] = NULL;
+    return answer;
+}
+
+보니까 이게 더 마음에 듦. 
