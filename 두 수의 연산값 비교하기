@@ -1,0 +1,26 @@
+더 크게 합치기에서 배운 것 응용해봄
+
+//
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b) {
+
+    int case1 = 1;
+    int casf1 = b;
+
+    while (casf1 > 0){
+        case1 *= 10;
+        casf1 /= 10;
+    }    
+
+    int result1 = a * case1 + b;
+    int result2 = 2 * a * b;
+
+    return result1 >= result2 ? result1 : result2;
+  }
+//
+
+이게 하드웨어한테는 더 좋다고함.
+
