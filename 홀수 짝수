@@ -16,3 +16,19 @@ int solution(int n) {
   }    
 return answer;
 }
+
+
+
+
+/// 내일 마저
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int n) {
+    int half = n / 2;
+    if(n & 1) return (half + 1) * (half + 1);
+    return 2 * half * (half + 1) * (2 * half + 1) / 3;
+}
