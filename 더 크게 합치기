@@ -1,0 +1,87 @@
+// 처음 작성한 내용
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b) {
+    
+    int lena = strlen(a);
+    int lenb = strlen(b);
+    
+    char stra[10050] = &a;
+    char strb[10050] = &b;
+
+    int* answer1 = (int*)malloc(memset(a + lena, b , lenb)));
+    int* answer2 = (int*)malloc(memset(b + lenb, a , lena)));
+    
+    if(answer1 > answer2){answer = answer1}
+    else {answer=answer2}
+    
+    answer[lena + lenb + 1] = '\0';
+    return answer;
+}
+//
+문제점
+1. 문자열 길이를 구하는 strlen을 여기서 사용한다면 일반 정수값인 a와 b를 넣으면 오류가 발생한다.
+2. ⁠char stra[...] = &a;⁠ 형태로 정수의 주소값을 문자열 배열에 바로 넣을 수 없다. 숫자를 문자로 바꾸려면 ⁠sprintf⁠ 같은 함수가 필요함.
+3. memset⁠은 메모리를 특정 값으로 채우는 함수, ⁠malloc⁠은 동적 메모리를 할당하는 함수임. 두 함수 모두 문자열을 이어 붙이는 데에는 적합하지 않다.
+
+
+// 개선
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b) {
+
+    char stra[20];
+    char strb[20];
+
+    sprintf(stra , "%d%d" , a , b);
+    sprintf(strb , "%d%d" , b , a);
+
+sprintf나 printf는 처음부터 변수속 내용물이 궁금한 함수라서 &a, 라든가 &b 이런거 해주면 기능에 어긋남.
+그래서 specifier를 decimal로 받는것임. 단 이때 정수값인 내용물을 "확보"하라는것이지 stra와 strb에 저장되는것은 문자열 상태임
+이건 sprintf가 무조건 char배열을 반환하는 함수이기 때문임.
+
+    int numa = atoi(stra);
+    int numb = atoi(strb);
+
+그래서 decimal로 저장받을 numa, numb준비가 필요했고, atoi를 이용한것임.
+
+    if (numa >= numb){return numa;}
+    else {return numb;}
+    }
+//
+
+// 개선 2
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b) {
+    // b의 자릿수만큼 10을 곱하기 위한 변수
+    int pow_b = 1;
+    int temp_b = b;
+    while (temp_b > 0) {
+        pow_b *= 10;
+        temp_b /= 10;
+    }
+    
+    // a의 자릿수만큼 10을 곱하기 위한 변수
+    int pow_a = 1;
+    int temp_a = a;
+    while (temp_a > 0) {
+        pow_a *= 10;
+        temp_a /= 10;
+    }
+    
+    // 이어 붙이기
+    int ab = a * pow_b + b;
+    int ba = b * pow_a + a;
+    
+    return ab >= ba ? ab : ba;
+}
+//
+
+
