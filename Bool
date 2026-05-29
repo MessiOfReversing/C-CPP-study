@@ -1,0 +1,46 @@
+https://www.w3schools.com/c/c_booleans.php
+
+Very often, in programming, you will need a data type that can only have one of two values, like:
+
+YES / NO
+ON / OFF
+TRUE / FALSE
+For this, C has a bool data type, which is known as booleans.
+
+Booleans represent one of two values: true or false.
+
+Before trying to print the boolean variables, you should know that boolean values are returned as integers:
+
+1 (or any other number that is not 0) represents true
+0 represents false
+Therefore, you can use the %d format specifier to print a boolean value:
+
+Example
+// Create boolean variables
+bool isProgrammingFun = true;
+bool isFishTasty = false;
+
+// Print boolean values
+printf("%d", isProgrammingFun);   // Prints 1 (true)
+printf("%d", isFishTasty);        // Prints 0 (false)
+
+따라서 bool은 원래 참/거짓 판단하는 함수라서 코딩을 아래와 같이 할 필요가 없다.
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, bool flag) {
+
+    if(flag == true){int answer = 0; answer = a + b; return answer;}
+    else {int answer = 0; answer = a - b; return answer;}
+}
+
+이렇게 하지말고 아래같이 하는게 훨씬 낫다
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, bool flag) {
+    return flag?a+b:a-b;
+}
+falg가 참이면 a+b를, 거짓이면 a-b를 반환하게 한다. 
