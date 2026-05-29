@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+int solution(const char* ineq, const char* eq, int n, int m) {
+    // n과 m이 같을 때: eq가 '='이면 무조건 참(1), '!'이면 거짓(0)
+    if (n == m) {
+        return eq[0] == '='; 
+    }
+    
+    // n과 m이 다를 때: 이제 eq는 상관없고 ineq의 방향만 맞으면 됩니다.
+    if (ineq[0] == '>') {
+        return n > m;
+    } else {
+        return n < m;
+    }
+}
+
+
+이거랑
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+int solution(const char* ineq, const char* eq, int n, int m) {
+    // 1. ">=" 인 경우
+    if (ineq[0] == '>' && eq[0] == '=') return n >= m;
+    
+    // 2. "<=" 인 경우
+    if (ineq[0] == '<' && eq[0] == '=') return n <= m;
+    
+    // 3. ">!" 인 경우
+    if (ineq[0] == '>' && eq[0] == '!') return n > m;
+    
+    // 4. "<!" 인 경우
+    if (ineq[0] == '<' && eq[0] == '!') return n < m;
+    
+    return 0;
+}
+이런 겉보기에 단순한 코드도 가능하긴함
+
+
+
+
