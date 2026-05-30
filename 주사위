@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, int c) {
+    
+    int answer = 0;
+    
+    int num1 = a + b + c
+    int num2 = (a + b + c) * (a * a + b * b + c * c)
+    int num3 = (a + b + c) * (a * a + b * b + c * c) * (a * a * a + b * b * b + c * c * c)
+        
+        
+    if(a == b == c){answer = num3;}
+    else if(a == c){
+    answer = (a == b) || (b == c) ? num2 : num1;
+    }
+    return answer;
+}
+이러면 경우하나 빼먹는다.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, int c) {
+    int answer = 0;
+
+    // 계산 편의를 위해 각 차수별 합을 미리 구해둡니다.
+    int sum1 = a + b + c;
+    int sum2 = (a * a) + (b * b) + (c * c);
+    int sum3 = (a * a * a) + (b * b * b) + (c * c * c);
+
+    if (a == b && b == c) {
+        // 1. 세 숫자가 모두 같은 경우
+        answer = sum1 * sum2 * sum3;
+    } 
+    else if (a != b && b != c && a != c) {
+        // 2. 세 숫자가 모두 다른 경우
+        answer = sum1;
+    } 
+    else {
+        // 3. 위의 두 조건에 걸리지 않았다면, '어느 두 숫자만 같은 경우'가 됩니다.
+        answer = sum1 * sum2;
+    }
+
+    return answer;
+}
+if가 많더라도 이게 나은듯 합니다.
