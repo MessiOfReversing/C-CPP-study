@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// num_list_len은 배열 num_list의 길이입니다.
+int solution(int num_list[], size_t num_list_len) {
+
+    int answer; 
+    int cmp1 = 1;
+    int cmp2 = 0;
+    for(size_t i = 0; i < num_list_len; i++){
+
+        cmp1 *= num_list[i];
+        cmp2 += num_list[i];
+
+        answer = cmp1 > (cmp2 * cmp2) ? 0 : 1;
+
+    }
+    return answer;
+}
+
+간단하지만 그래도 첫경험이다에요 헤응
