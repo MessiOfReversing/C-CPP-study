@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// included_len은 배열 included의 길이입니다.
+int solution(int a, int d, bool included[], size_t included_len) {
+    int j = 0;
+    char* an = (char*)malloc(sizeof(char) * (included_len + 1));
+    for(int i = 1; i < included_len; i++){
+        an[j++] = a + d * i
+        for(int k = 1; k < included_lenl k++){
+        while(included[k] == true){
+            answer += an[k++]
+        }
+    }
+        }free(an);
+                return answer;} 
+
+for 안에 또 for랑 while도 있고, i, j, k 계속 나오는 코드를 짜버렸네요.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// included_len은 배열 included의 길이입니다.
+int solution(int a, int d, bool included[], size_t included_len) {
+    int answer = 0;
+
+    for (size_t i = 0; i < included_len; i++) {
+        // included[i]가 true일 때만 누적해서 더해줍니다.
+        if (included[i] == true) {
+            answer += (a + d * i);
+        }
+    }
+
+    return answer;
+}
+
+이게 훨씬 낫네요.
+
+char* an = (char*)malloc(sizeof(char) * (included_len + 1)); 를 쓸 이유가 없었다는것
+an[j++] = a + d * i
+        for(int k = 1; k < included_lenl k++){
+        while(included[k] == true){
+            answer += an[k++] 이렇게 끊어서 갈필요 없이 한번에
+for (size_t i = 0; i < included_len; i++) {
+        if (included[i] == true) {
+            answer += (a + d * i);
+        }로 작성 가능했다는점 기억하는게 좋겠습니다.
