@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int num_list[], size_t num_list_len) {
+
+    int* answer = (int*)malloc(sizeof(int) * (num_list_len + 1));
+
+    for (size_t i = 0; i < num_list_len; i++){
+        answer[i] = num_list[i];
+    }
+    int last = num_list[num_list_len - 1];
+    int prev = num_list[num_list_len - 2];
+    int new_value = 0;
+    if (last > prev){new_value = last - prev;}
+    else{new_value = last * 2;}
+    answer[num_list_len] = new_value;
+    return answer;
+}
+
+이렇게 동적할당해서 새롭게 인자를 넣으면 좋다.
+처음엔 아래같이 풀었었다.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int num_list[], size_t num_list_len) {
+    
+    int prepare = 0;
+    int num1 = 0;
+    int num2 = 0;
+    
+    num1 = num_list[num_list_len - 1]
+    num2 = num_list[num_list_len]
+        
+    prepare = num1 < num2 ? num2-num1:num2 * 2;
+ 
+    num_list[num_list_len] = prepare;
+    num_list[num_list_len + 1] = '\0';
+    
+    return num_list;
+} 
+
+이건 말도 안되는 코드다.
+
+일단 문자열도 아니고 배열인데 마지막 인자를 null로 설정한것도 큰 착각이었고, 원래 던져준 배열크기 그상태 그대로 num_list[num_list_len] = prepare; 이렇게 해버리면 기존 인자에 접근해서 새로 할당하는거밖에 안된다.
