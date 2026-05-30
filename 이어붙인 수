@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+int solution(int num_list[], size_t num_list_len) {
+    // 문자열을 저장할 공간은 0이 아니라 ("")로 초기화
+    // 제한사항에서 최대 10개 글자이므로 크기는 12 정도로..
+    char evens_str[12] = "";
+    char odds_str[12] = "";
+    char temp[2]; // 숫자를 잠시 문자로 바꿀 임시 공간
+    
+    for (size_t i = 0; i < num_list_len; i++) {
+        // 숫자를 문자열로 변환 (e.g. 숫자 3 -> 문자 "3")
+        sprintf(temp, "%d", num_list[i]);
+        
+        if (num_list[i] & 1) {
+            strcat(odds_str, temp);  // 문자열 뒤에 붙이기
+        } else {
+            strcat(evens_str, temp); // 문자열 뒤에 붙이기
+        }
+    }
+    
+    // atoi 함수는 "351" 같은 문자열을 진짜 숫자 351로 바꿔서 이용한것.
+    int final_odds = atoi(odds_str);
+    int final_evens = atoi(evens_str);
+    
+    return final_odds + final_evens;
+}
+
+이건 그냥 strcat이랑 atoi 복습겸 한번 써보려고 억지로 쓴거고 
+아래가 훨씬 컴퓨터 입장에서도 처리하기에 간결하고 보기 좋음.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int num_list[], size_t num_list_len) {
+    int even_sum = 0; // 짝수를 이어 붙일 변수
+    int odd_sum = 0;  // 홀수를 이어 붙일 변수
+    
+    for (size_t i = 0; i < num_list_len; i++) {
+        // 홀수인지 짝수인지 판별 (비트 연산자 & 1 <<< 이거 해보고 싶었음)
+        if (num_list[i] & 1) {
+            // 기존 숫자를 자릿수 하나 올리고(x10), 1의자리 숫자만 계속 채워나가는 작성.
+            odd_sum = (odd_sum * 10) + num_list[i];
+        } else {
+            even_sum = (even_sum * 10) + num_list[i];
+        }
+    }
+    
+    // 마지막에 두 숫자를 바로 더해서 리턴.
+    return even_sum + odd_sum;
+}
+
+
