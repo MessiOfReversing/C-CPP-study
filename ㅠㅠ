@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int arr[], size_t arr_len, int** queries, size_t queries_rows, size_t queries_cols) {
+
+    for(int i = 0; i < arr_len; i++){
+        int j = 0;
+        while(j < queries_cols;){
+            queries[i][j];
+            arr[i] = arr[j];
+            arr[j] = arr[i];
+        } j++;
+    } int* answer = (int*)malloc(sizeof(int) * queries_cols); return answer;
+}
+
+참 특수한 코드인데요, 아래같이 짜야 옳습니다.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int arr[], size_t arr_len, int** queries, size_t queries_rows, size_t queries_cols) {
+    // [rows(행)][cols(열)]임.
+    // for로 queries를 순서대로 하나씩 확인
+    for (size_t k = 0; k < queries_rows; k++) {
+        // 바꾸고자 하는 두 인덱스 i와 j를 가져옴. cols는 항상 0이랑 1뿐인 항상 2인 상태이기 때문에 0이랑 1로만 둔다.
+        int i = queries[k][0];
+        int j = queries[k][1];
+        
+        // 이제 arr[i]와 arr[j]의 값을 서로 바꿈. 임시공간 만들어야함. 
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    // 결과물(arr)을 담을 정답 배열을 arr_len 크기만큼 할당
+    int* answer = (int*)malloc(sizeof(int) * arr_len);
+    
+    // 변환이 완료된 arr의 값들을 answer에 복사
+    for (size_t i = 0; i < arr_len; i++) {
+        answer[i] = arr[i];
+    }
+    
+    return answer;
+}
+
+
+
+가졌던 의문 1) Queries[0][0] 보면 0행 0열의 값은데 [[0, 3],[1, 2],[1, 4]]엔 0행 0열이 없지않나?
+
+답) 
+queries = [
+    [0, 3],  <- 이게 0번째 행 (첫 번째 줄)
+    [1, 2],  <- 이게 1번째 행 (두 번째 줄)
+    [1, 4]   <- 이게 2번째 행 (세 번째 줄)
+]
+
+
+가졌던 의문 2) 
+Int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp; 
+이렇게 하면 arr[i]자리에 arr[j]가 들어가서 arr[j]가 두개가 된 상태에 temp를 하니 그 두개가 한번에 temp로 바뀌어서 arr[i] 두개짜리 상태가 되는거 아닌가요?
+
+답 ) 
+int temp로 빈접시 먼저 가져와서 arr[i]를 일단 집어넣고, 그후에 원래있던 arr[i]에 arr[j]를, arr[j]에 접시에 넣어둔 arr[i]를 넣는것임.
+다시말해 두 arr[i]는 할당된 주소만 다르고 나머지는 다 같기떄문에 충돌없이 작동하게되는것임.
