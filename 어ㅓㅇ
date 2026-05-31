@@ -80,8 +80,6 @@ char* solution(int numLog[], size_t numLog_len) {
 #include <stdlib.h>
 
 char* solution(int numLog[], size_t numLog_len) {
-    // 1. 결과 문자열의 길이는 (numLog_len - 1)입니다. 
-    // 문자열 종료 문자('\0')를 포함하기 위해 numLog_len만큼 할당합니다.
     char* answer = (char*)malloc(sizeof(char) * numLog_len);
     
     // 2. 조작 횟수는 (numLog_len - 1)번 수행됩니다.
@@ -112,3 +110,7 @@ char* solution(int numLog[], size_t numLog_len) {
     
     return answer;
 }
+
+
+// 1. 결과 문자열의 길이는 (numLog_len - 1)입니다. 
+    // 문자열 종료 문자('\0')를 포함하기 위해 numLog_len만큼 할당합니다.
