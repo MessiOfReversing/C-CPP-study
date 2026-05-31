@@ -67,12 +67,12 @@ char* solution(int numLog[], size_t numLog_len) {
 
 큰 문제는 
 1. 문자열 끝은 null 포함, 배열은 null 포함하지 않는다.
-2. 정수 배열을 다룰거면 문자열 길이에서 -1 해서 malloc 할당하는것이 맞다.
+2. 정수 배열을 다룰때는 문자열 길이에서 -1 해서 malloc 할당하는것이 맞다. 따라서 answer는 문자열이니 null이 있어야하는것이고, []있는 배열들은 없어야함
 3. inv[i]를 사용할 필요가 없었고, 그와중에 처리도 못했다.
 4. switch에서 ''로 묶으면 아스키값으로 인식되니 정수로 인식되려면 따옴표 없어야한다. 
 5. 여기선 쓰이지 않았지만 ''안에 +/- 같은 부호는 넣을수가 없다.
 
-이걸 감안해서 수정하면 아래와 같다.
+이걸 감안해서 수정하면 아래와 같다잉
 
 
 #include <stdio.h>
@@ -82,35 +82,21 @@ char* solution(int numLog[], size_t numLog_len) {
 char* solution(int numLog[], size_t numLog_len) {
     char* answer = (char*)malloc(sizeof(char) * numLog_len);
     
-    // 2. 조작 횟수는 (numLog_len - 1)번 수행됩니다.
     for (size_t i = 0; i < numLog_len - 1; i++) {
         int prelast = numLog[i];     // 이전 값
         int last = numLog[i + 1];    // 현재 값
         int diff = last - prelast;   // 두 값의 차이
-        
-        // 3. 정수 값을 비교하므로 작은따옴표(' ')를 제거해야 합니다.
         switch(diff) {
-            case 1:   
-                answer[i] = 'w'; 
-                break;
-            case -1:  
-                answer[i] = 's'; 
-                break;
-            case 10:  
-                answer[i] = 'd'; 
-                break;
-            case -10: 
-                answer[i] = 'a'; 
-                break;
+            case 1 : answer[i] = 'w'; break;
+            case -1 : answer[i] = 's'; break;
+            case 10 : answer[i] = 'd'; break;
+            case -10 : answer[i] = 'a'; break;
         }
-    }
-    
-    // 4. C언어 문자열의 마지막에는 반드시 NULL 문자를 넣어줍니다.
-    answer[numLog_len - 1] = '\0';
-    
-    return answer;
+    } answer[numLog_len - 1] = '\0'; return answer;
 }
 
 
-// 1. 결과 문자열의 길이는 (numLog_len - 1)입니다. 
-    // 문자열 종료 문자('\0')를 포함하기 위해 numLog_len만큼 할당합니다.
+결과 문자열의 길이는 (numLog_len - 1), 그리고 이어서 바로뒤에 문자열 종료 문자('\0')를 포함하기 위해 numLog_len만큼 할당.
+즉 loop 횟수는 (numLog_len - 1)번 수행되게 하는것임
+
+case뒤에 작은따옴표(' ')를 제거해야 합니다.
