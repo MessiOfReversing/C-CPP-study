@@ -100,3 +100,7 @@ char* solution(int numLog[], size_t numLog_len) {
 즉 loop 횟수는 (numLog_len - 1)번 수행되게 하는것임
 
 case뒤에 작은따옴표(' ')를 제거해야 합니다.
+
+
+swith(diff) 는 이전 상태에서 얼마나 변했는지를 표현하도록 그 변화량을 계산하여 diff라는 변수에 저장을 한것이다.
+아래 나오는것들은 변화량들이다~ 라고 설명하는 그런 의미라고 이해했습니다.
