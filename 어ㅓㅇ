@@ -1,0 +1,114 @@
+문제 설명
+
+정수 배열 numLog가 주어집니다. 처음에 numLog[0]에서 부터 시작해 "w", "a", "s", "d"로 이루어진 문자열을 입력으로 받아 순서대로 다음과 같은 조작을 했다고 합시다.
+"w" : 수에 1을 더한다.
+"s" : 수에 1을 뺀다.
+"d" : 수에 10을 더한다.
+"a" : 수에 10을 뺀다.
+그리고 매번 조작을 할 때마다 결괏값을 기록한 정수 배열이 numLog입니다. 즉, numLog[i]는 numLog[0]로부터 총 i번의 조작을 가한 결과가 저장되어 있습니다.
+주어진 정수 배열 numLog에 대해 조작을 위해 입력받은 문자열을 return 하는 solution 함수를 완성해 주세요.
+제한사항
+2 ≤ numLog의 길이 ≤ 100,000
+-100,000 ≤ numLog[0] ≤ 100,000
+1 ≤ i ≤ numLog의 길이인 모든 i에 대해 |numLog[i] - numLog[i - 1]|의 값은 1 또는 10입니다.
+입출력 예
+numLog	result
+[0, 1, 0, 10, 0, 1, 0, 10, 0, -1, -2, -1]	"wsdawsdassw"
+입출력 예 설명
+입출력 예 #1
+result인 "wsdawsdassw"를 따라 numLog[0]에서부터 시작해 조작을 하면 numLog의 값과 순서대로 일치합니다. 따라서 "wsdawsdassw"를 return 합니다.
+Hint
+"수 조작하기 1" 문제의 n값이 numLog[0]에 해당하며, 이 문제에서 주어진 numLog에 따라 "수 조작하기 1" 문제의 control을 구하는 문제라고 이해할 수 있습니다.
+입출력 예 #1은 "수 조작하기 1" 문제의 입출력 예 #1과 같은 예시이므로 참고하시기 바랍니다.
+
+
+
+
+이문제 풀고싶었는데
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+char* solution(int numLog[], size_t numLog_len) {
+   
+    int last = 0;
+    int prelast = 0;
+    char* answer = (char*)malloc(sizeof(char) * numLog_len);
+    for (size_t i = 0; i < numLog_len; i++){
+        answer[i] = numLog[i];
+    }
+    int i = 0; while(numLog[i] != '\0'){
+        
+        last = numLog[i + 1];
+        prelast = numLog[i];
+        inv[i] = last - prelast;
+        
+        switch(inv[i]){
+            case '1' : answer[i] = 'w'; break;
+            case '-1' : answer[i] = 's'; break;
+            case '+10' : answer[i] = 'd'; break;
+            case '-10' : answer[i] = 'a'; break;
+        } i++;
+    } return answer;
+} 
+
+
+
+
+이렇게 풀려고 해봤는데 어떻게 수정해야할까요?
+
+
+
+
+// sol..
+
+
+큰 문제는 
+1. 문자열 끝은 null 포함, 배열은 null 포함하지 않는다.
+2. 정수 배열을 다룰거면 문자열 길이에서 -1 해서 malloc 할당하는것이 맞다.
+3. inv[i]를 사용할 필요가 없었고, 그와중에 처리도 못했다.
+4. switch에서 ''로 묶으면 아스키값으로 인식되니 정수로 인식되려면 따옴표 없어야한다. 
+5. 여기선 쓰이지 않았지만 ''안에 +/- 같은 부호는 넣을수가 없다.
+
+이걸 감안해서 수정하면 아래와 같다.
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+char* solution(int numLog[], size_t numLog_len) {
+    // 1. 결과 문자열의 길이는 (numLog_len - 1)입니다. 
+    // 문자열 종료 문자('\0')를 포함하기 위해 numLog_len만큼 할당합니다.
+    char* answer = (char*)malloc(sizeof(char) * numLog_len);
+    
+    // 2. 조작 횟수는 (numLog_len - 1)번 수행됩니다.
+    for (size_t i = 0; i < numLog_len - 1; i++) {
+        int prelast = numLog[i];     // 이전 값
+        int last = numLog[i + 1];    // 현재 값
+        int diff = last - prelast;   // 두 값의 차이
+        
+        // 3. 정수 값을 비교하므로 작은따옴표(' ')를 제거해야 합니다.
+        switch(diff) {
+            case 1:   
+                answer[i] = 'w'; 
+                break;
+            case -1:  
+                answer[i] = 's'; 
+                break;
+            case 10:  
+                answer[i] = 'd'; 
+                break;
+            case -10: 
+                answer[i] = 'a'; 
+                break;
+        }
+    }
+    
+    // 4. C언어 문자열의 마지막에는 반드시 NULL 문자를 넣어줍니다.
+    answer[numLog_len - 1] = '\0';
+    
+    return answer;
+}
