@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int start_num, int end_num) {
+    
+    int* answer = (int*)malloc(sizeof(int) * (end_num - start_num));
+    
+    for(int i = 0; i <= (end_num - start_num); i++){
+        answer[i] = start_num + i;
+    }
+    return answer;
+}
+
+이거 뭐가 잘못되었는지 잘 모르겠는데
+
+    int* answer = (int*)malloc(sizeof(int) * (end_num - start_num));에서
+malloc(sizeof(int) * (end_num - start_num+1)로 이거 하나만 고치면 된다.
+
+배열 첫째 친구는 물론 0이지만 크기로 봐서는 1칸은 1칸으로 보지 0칸으로 보지는 않으니 말이다.
+
