@@ -178,3 +178,24 @@ s부터 e까지 arr[i]로 탐색
 
 완.
 
+
+정리할겸 더 적어보자면
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int arr[], size_t arr_len, int** queries, size_t queries_rows, size_t queries_cols) {int* answer = (int*)malloc(sizeof(int) * queries_rows); for(size_t i = 0; i < queries_rows; i++){int s = queries[i][0]; int e = queries[i][1]; int k = queries[i][2]; int set = 1000001; for(int j = s; j <= e; j++){if(arr[j] > k && arr[j] < set){set = arr[j];}}if(set == 1000001){answer[i] = -1;}else{answer[i] = set;}}return answer;}
+
+중괄호 없애도됨
+
+이렇게하면 될듯
+
+
+int* solution(int a[], size_t al, int** q, size_t qr, size_t qc) {
+    int* r = (int*)malloc(sizeof(int) * qr);
+    for (size_t i = 0; i < qr; r[i] = (r[i] == 1000001 ? -1 : r[i]), i++) for (size_t j = q[i][0], _ = r[i] = 1000001; j <= q[i][1]; r[i] = (a[j] > q[i][2] && a[j] < r[i]) ? a[j] : r[i], j++);
+    return r;
+}
