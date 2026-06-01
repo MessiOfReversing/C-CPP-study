@@ -1,0 +1,88 @@
+[문제 설명
+
+정수 l과 r이 주어졌을 때, l 이상 r이하의 정수 중에서 숫자 "0"과 "5"로만 이루어진 모든 정수를 오름차순으로 저장한 배열을 return 하는 solution 함수를 완성해 주세요.
+만약 그러한 정수가 없다면, -1이 담긴 배열을 return 합니다.
+제한사항
+1 ≤ l ≤ r ≤ 1,000,000
+입출력 예
+l	r	result
+5	555	[5, 50, 55, 500, 505, 550, 555]
+10	20	[-1]
+입출력 예 설명
+입출력 예 #1
+5 이상 555 이하의 0과 5로만 이루어진 정수는 작은 수부터 5, 50, 55, 500, 505, 550, 555가 있습니다. 따라서 [5, 50, 55, 500, 505, 550, 555]를 return 합니다.
+입출력 예 #2
+10 이상 20 이하이면서 0과 5로만 이루어진 정수는 없습니다. 따라서 [-1]을 return 합니다.] 이런 문제인데 
+
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int l, int r){int* answer = (int*)malloc(sizeof(int) * 1000001);int num[1000001];for(int i = 0; i < 1000001; i++){if(l < 10; num[i] % 5 == 0 && num[i] == r){num[i] = l * 10; num[i] += l; break;}else{i = 0; num[i] = -1;}}return answer;} 이렇게 시도했는데 뭘 수정해야할까요?
+
+
+
+num 배열을 만들고서는 안에 아무것도 들어가지 못했다. 애초에 만들 필요도 없었다.
+if 조건문엔 ;을 넣어서는 안된다.
+answer에도 값이 저장되지 않았다!
+
+이렇게 고쳤다.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int* solution(int l, int r){int* answer = (int*)malloc(sizeof(int) * 1000001);int count = 0;for(int i = l; i <=r ; i++){int temp = i; bool is_valid = true;while(temp>0){int digit = temp % 10;if(digit != 0 && digit != 5){is_valid = false;break;}temp /= 10;}if(is_valid){answer[count++] = i;}}if(count == 0){answer[0] = -1;count = 1;}answer = (int*)realloc(answer, sizeof(int) * count);return answer;}
+
+l부터 r까지 키워가며 숫자를 문자열로 바꾼뒤 0과 5 이외의 글자가 있는가를 점검하는 순서다. 
+
+bool은 참과 거짓 두가지만 결과로 내놓는 자료형이다.
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int l, int r) {
+    int* answer = (int*)malloc(sizeof(int) * 1000001);
+    int count = 0;
+    
+    for (int i = l; i <= r; i++) {
+        int temp = i; 
+        bool is_valid = true;
+        
+        while (temp > 0) {
+            int digit = temp % 10;
+
+여기서 digit은 참고로 한자리수라는 의미임.
+10으로 나눠주니 나머지는 당연히 1의자리숫자가 나오는것임.
+
+            if (digit != 0 && digit != 5) {
+                is_valid = false;
+                break;
+            }
+            temp /= 10;
+
+여기서 이용한건 C언어의 정수간 나눗셈 결과에서 소수점 이하는 버려진다는 사실이다.
+
+따라서 505라면 10으로 나누었을때 50이 남고 temp에 50이 들어간다. 나머지로 나온 5는 버려진다. 
+그리고 그 전에 if에서 걸리지않고 통과했을 1의자리수인 5는 digit에 들어있다.
+
+두번째 루프에선 temp가 50이니 5가 남게되어 새로운 temp값이 된다. 세번째 루프에선 0이겠다. while에 들어가지 못할것. 즉 종료.
+
+        }
+        
+        if (is_valid) {
+            answer[count++] = i;
+        }
+    }
+    
+    if (count == 0) {
+        answer[0] = -1;
+        count = 1;
+    }
+    
+    answer = (int*)realloc(answer, sizeof(int) * count);
+    return answer;
+}
