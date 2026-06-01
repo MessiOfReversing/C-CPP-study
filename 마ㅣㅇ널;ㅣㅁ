@@ -4,3 +4,69 @@ queries[k]는 k번째 쿼리라는뜻.
 처음엔 queries[][][]형태로 하나씩 지목해야하나 했는데, 2차원 배열이라서 [][][]형태는 안된다고 이해했다.
 
 정답 배열도 크기가 3이어야하니 malloc은 queries_row 크기여야함. 쿼리의 행 개수.
+[rows(행)][cols(열)]임.
+
+
+
+
+
+
+
+
+문제 설명
+
+정수 배열 arr와 2차원 정수 배열 queries이 주어집니다. queries의 원소는 각각 하나의 query를 나타내며, [s, e, k] 꼴입니다.
+각 query마다 순서대로 s ≤ i ≤ e인 모든 i에 대해 k보다 크면서 가장 작은 arr[i]를 찾습니다.
+각 쿼리의 순서에 맞게 답을 저장한 배열을 반환하는 solution 함수를 완성해 주세요.
+단, 특정 쿼리의 답이 존재하지 않으면 -1을 저장합니다.
+
+
+입출력 예
+arr	                                               
+[0, 1, 2, 4, 3]	
+
+queries
+[[0, 4, 2],[0, 3, 2],[0, 2, 2]]	                 
+
+result
+[3, 4, -1]
+
+
+
+
+
+
+
+
+
+
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int arr[], size_t arr_len, int** queries, size_t queries_rows, size_t queries_cols) {
+    for(size_t k = 0; k < queries_rows; k++){
+        int m = queries[k][][];
+        int n = queries[][k][];
+        int o = queries[][][k];
+
+처음엔 이런식으로 할 생각이었음. 당연히 틀렸지만..
+size_t queries_rows, size_t queries_cols 만 주어진것만 보더라도 "2차원이구나" 하고 생각해야했던것 같음.
+
+
+
+        
+        int temp1 = m;
+        int temp2 = n;
+        
+        if(arr[k] > temp1 && arr[k] < temp2){}
+        
+        
+    }
+    int a = 0;
+    int cmp_prep = 0;
+    for(size_t i = 1; i < arr_len; i++){
+        if(arr[i-1] > 2){cmp_prep[i-1] = arr[i-1] - 2; a = cmp[i] < cmp_prep[i-1] ? cmp[i]:cmp[i-1];}
+        }
+    int* answer = (int*)malloc(1);
+    return answer;
+}
