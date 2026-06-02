@@ -1,0 +1,65 @@
+문제 설명
+
+문자열 my_string과 정수 배열 index_list가 매개변수로 주어집니다. my_string의 index_list의 원소들에 해당하는 인덱스의 글자들을 순서대로 이어 붙인 문자열을 return 하는 solution 함수를 작성해 주세요.
+제한사항
+1 ≤ my_string의 길이 ≤ 1,000
+my_string의 원소는 영소문자로 이루어져 있습니다.
+1 ≤ index_list의 길이 ≤ 1,000
+0 ≤ index_list의 원소 < my_string의 길이
+입출력 예
+my_string	index_list	result
+"cvsgiorszzzmrpaqpe"	[16, 6, 5, 3, 12, 14, 11, 11, 17, 12, 7]	"programmers"
+"zpiaz"	[1, 2, 0, 0, 3]	"pizza"
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+char* solution(const char* my_string, int index_list[], size_t index_list_len) {
+    char* answer = (char*)malloc(sizeof(char) * index_list_len);
+    for(int i = 0; i < index_list_len; i++){
+        int num = index_list[i];
+        int prep[1001];
+        prep[num]= index_list[i];
+    
+        strcat(answer, prep[i]);}
+    
+    return answer;}
+
+
+이거 틀린 이유
+
+
+
+
+1. 결과로 내놓아야할 문자열은 마지막에 null 이 필요한데 감안하지 않음.
+2. strcat은 기존 문자열에서 새로운 문자열 붙이는것이지 malloc으로 정리되지 않은 공간의 문자열끼리 함부로 조합 가능한 함수가 아님.
+3. 게다가 내가 조합해야하는건 문자임. 문자열 조합하는 strcat을 사용할수가 없단거임!!!
+4. answer도 배열인데 그걸 몰랐음
+
+
+
+
+<수정>
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+char* solution(const char* my_string, int index_list[], size_t index_list_len) {
+    char* answer = (char*)malloc(sizeof(char) * (index_list_len + 1));
+    for(int i = 0; i < index_list_len; i++){
+        int num = index_list[i];
+
+        answer[i]= my_string[num];}
+    answer[index_list_len] = '\0';
+
+    return answer;}
