@@ -1,0 +1,183 @@
+문제 설명
+
+1부터 6까지 숫자가 적힌 주사위가 네 개 있습니다. 네 주사위를 굴렸을 때 나온 숫자에 따라 다음과 같은 점수를 얻습니다.
+네 주사위에서 나온 숫자가 모두 p로 같다면 1111 × p점을 얻습니다.
+세 주사위에서 나온 숫자가 p로 같고 나머지 다른 주사위에서 나온 숫자가 q(p ≠ q)라면 (10 × p + q)2 점을 얻습니다.
+주사위가 두 개씩 같은 값이 나오고, 나온 숫자를 각각 p, q(p ≠ q)라고 한다면 (p + q) × |p - q|점을 얻습니다.
+어느 두 주사위에서 나온 숫자가 p로 같고 나머지 두 주사위에서 나온 숫자가 각각 p와 다른 q, r(q ≠ r)이라면 q × r점을 얻습니다.
+네 주사위에 적힌 숫자가 모두 다르다면 나온 숫자 중 가장 작은 숫자 만큼의 점수를 얻습니다.
+네 주사위를 굴렸을 때 나온 숫자가 정수 매개변수 a, b, c, d로 주어질 때, 얻는 점수를 return 하는 solution 함수를 작성해 주세요.
+
+
+
+
+
+
+
+<첫풀이>
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, int c, int d) {
+// searching for bigger couple
+    int bigger1 = a > c ? a : c;
+    int smaller1 = a < c ? a : c;
+    int bigger23 = a > b ? a : b;
+    int smaller23 = a < b ? a : b;
+// searching for the smallest int
+    int cmp = a > b ? b : a;
+    cmp = cmp > c ? c : cmp;
+    cmp = cmp > d ? d : cmp;
+
+    
+// a != b != c != d
+    int case10 = (a != b && b != c) && (c != d && d != a) ? cmp : 0;
+    if(case10 != 0){return cmp;}
+// a=d, b=c
+    int fix3 = (a == d && b == c) && (a != b) ? (a + b) * (bigger23 - smaller23) : case10; if(fix3 != case10){return fix3;}
+// a=c, b=d
+    int fix2 = (a == c && b == d) && (a != b) ? (a + b) * (bigger23 - smaller23) : fix3; if(fix2 != fix3){return fix2;}
+// a=b, c=d
+    int fix1 = (a == b && c == d) && (a != c) ? (a + c) * (bigger1 - smaller1) : fix2; if(fix1 != fix2){return fix1;}
+// a = d, a != b, a != c, b != c
+    int case9 = (a == d && a != b) && (a != c && b != c) ? b * c : case10; if(case9 != case10){return case9;}
+// c = d, c != a, c != b, a != b
+    int case8 = (c == d && c != a) && (c != b && a != b) ? a * b : case9; if(case8 != case9){return case8;}
+// b = d, b != a, b != c, a != c
+    int fix7to8 = (b == d && b != a) && (b != c && a != c) ? a * c : case8; if(fix7to8 != case8){return fix7to8;}
+// b = c, b != a. b != d, a != d
+    int case7 = (b == c && b != a) && (b != d && a != d) ? a * d : fix7to8; if(case7 != fix7to8){return case7;}
+// a = c, a != b, a != d, b != d
+    int fix6to7 = (a == c && a != b) && (a != d && b != d) ? b * d : case7; if(fix6to7 != case7){return fix6to7;}
+// a = b, a != c, a != d, c != d
+    int case6 = (a == b && a != c) && (a != d && c != d) ? c * d : fix6to7; if(case6 != fix6to7){return case6;}
+// b = c = d != a
+    int case5 = (b == c && c == d) && (b != a) ? (b * 10 + a) * (b * 10 + a) : case6; if(case5 != case6){return case5;}
+// a = c = d != b
+    int case4 = (a == c && c == d) && (a != b) ? (a * 10 + b) * (a * 10 + b) : case5; if(case4 != case5){return case4;}
+// a = b = d != c
+    int case3 = (a == b && b == d) && (a != c) ? (a * 10 + c) * (a * 10 + c) : case4; if(case3 != case4){return case3;}
+// a = b = c != d
+    int case2 = (a == b && b == c) && (c != d) ? (a * 10 + d) * (a * 10 + d) : case3; if(case2 != case3){return case2;}
+// a = b = c = d 
+    int case1 = (a == b && b == c) && (c == d) ? a * 1000 + a * 100 + a * 10 + a : case2; if(case1 != case2){return case1;}
+}
+
+
+
+<교정>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, int c, int d) {
+    // 1부터 6까지 숫자의 등장 횟수를 기록할 배열 (0으로 초기화)
+    int count[7] = {0};
+    count[a]++;
+    count[b]++;
+    count[c]++;
+    count[d]++;
+
+    // 가장 작은 값을 미리 구하기 (삼항 연산자 활용)
+    int min_val = a < b ? a : b;
+    min_val = min_val < c ? min_val : c;
+    min_val = min_val < d ? min_val : d;
+
+    // 변수 초기화
+    int p = 0, q = 0, r = 0;
+
+    // 빈도수에 따라 p, q, r 매칭하기
+    for (int i = 1; i <= 6; i++) {
+        if (count[i] == 4) {
+            return 1111 * i; // 네 숫자가 모두 같은 경우
+        }
+        if (count[i] == 3) p = i;
+        if (count[i] == 2) {
+            if (p == 0) p = i; // 첫 번째로 2번 나온 수
+            else q = i;        // 두 번째로 2번 나온 수
+        }
+        if (count[i] == 1) {
+            if (q == 0) q = i; // 3개 같고 남은 하나 혹은 2개 같고 남은 것들
+            else r = i;
+        }
+    }
+
+    // 1. 세 주사위가 같은 경우 (count[p] == 3)
+    if (count[p] == 3) {
+        return (10 * p + q) * (10 * p + q);
+    }
+
+    // 2. 두 개씩 같은 값이 나온 경우 (count[p] == 2 && count[q] == 2)
+    if (count[p] == 2 && count[q] == 2) {
+        int diff = p > q ? p - q : q - p; // 절댓값 계산
+        return (p + q) * diff;
+    }
+
+    // 3. 어느 두 주사위만 같고 나머지는 다른 경우 (count[p] == 2)
+    if (count[p] == 2) {
+        return q * r;
+    }
+
+    // 4. 네 주사위 숫자가 모두 다른 경우
+    return min_val;
+}
+
+
+
+
+<재시도>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int solution(int a, int b, int c, int d) {
+    // for compare
+    int ab_max = a > b ? a : b;
+    int ab_min = a < b ? a : b;
+    int ac_max = a > c ? a : c;
+    int ac_min = a < c ? a : c;
+    int ad_max = a > d ? a : d;
+    int ad_min = a < d ? a : d;
+    int bc_max = b > c ? b : c;
+    int bc_min = b < c ? b : c;
+
+    // minimum
+    int cmp = a > b ? b : a;
+    cmp = cmp > c ? c : cmp;
+    cmp = cmp > d ? d : cmp;
+
+    // case10 fix
+    int case10 = (a != b && a != c && a != d) && (b != c && b != d && c != d) ? cmp : 0;
+    if (case10 != 0) {return cmp;}
+
+    // (p + q) * |p - q| << new fix
+    int fix3 = (a == d && b == c && a != b) ? (a + b) * (ab_max - ab_min) : case10; if (fix3 != case10) { return fix3; }
+
+    // a=c, b=d
+    int fix2 = (a == c && b == d && a != b) ? (a + b) * (ab_max - ab_min) : fix3; if (fix2 != fix3) { return fix2; }
+    // a=b, c=d
+    int fix1 = (a == b && c == d && a != c) ? (a + c) * (ac_max - ac_min) : fix2; if (fix1 != fix2) { return fix1; }
+
+    // x=y, (!= p, q)
+    int case9 = (a == d && a != b && a != c && b != c) ? b * c : case10; if (case9 != case10) { return case9; }
+    int case8 = (c == d && c != a && c != b && a != b) ? a * b : case9;  if (case8 != case9) { return case8; }
+    int fix7to8 = (b == d && b != a && b != c && a != c) ? a * c : case8; if (fix7to8 != case8) { return fix7to8; }
+    int case7 = (b == c && b != a && b != d && a != d) ? a * d : fix7to8; if (case7 != fix7to8) { return case7; }
+    int fix6to7 = (a == c && a != b && a != d && b != d) ? b * d : case7; if (fix6to7 != case7) { return fix6to7; }
+    int case6 = (a == b && a != c && a != d && c != d) ? c * d : fix6to7; if (case6 != fix6to7) { return case6; }
+
+    // x=y=z, not a cases
+    int case5 = (b == c && c == d && b != a) ? (10 * b + a) * (10 * b + a) : case6; if (case5 != case6) { return case5; }
+    int case4 = (a == c && c == d && a != b) ? (10 * a + b) * (10 * a + b) : case5; if (case4 != case5) { return case4; }
+    int case3 = (a == b && b == d && a != c) ? (10 * a + c) * (10 * a + c) : case4; if (case3 != case4) { return case3; }
+    int case2 = (a == b && b == c && a != d) ? (10 * a + d) * (10 * a + d) : case3; if (case2 != case3) { return case2; }
+
+    // a=b=c=d case
+    int case1 = (a == b && b == c && c == d) ? 1111 * a : case2; 
+    return case1;
+}
+
+
