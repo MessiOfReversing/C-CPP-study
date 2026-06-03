@@ -1,0 +1,86 @@
+문제 설명
+
+문자열 my_string과 이차원 정수 배열 queries가 매개변수로 주어집니다. queries의 원소는 [s, e] 형태이며
+my_string의 인덱스 s부터 인덱스 e까지를 뒤집으라는 의미입니다. 
+my_string에 queries의 명령을 순서대로 처리한 후의 문자열을 return 하는 solution 함수를 작성해 주세요.
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+char* solution(const char* my_string, int** queries, size_t queries_rows, size_t queries_cols) {
+    char* answer = (char*)malloc(sizeof(char) * my_string);
+    
+    for(int i = 0; i < len; i++){
+        int a = queries[0][i];
+        int b = queries[1][i];
+        int len = b - a;
+        *(answer + i) = *(my_string + (len - i);} 
+    
+    return answer;
+}
+
+
+이게 처음 작성한 코드인데, 뭐가 문제일까
+
+1. int len = b - a; 로 선언하기 전에 for(int i = 0; i < len; i++){ 라고 적어버림.
+2. malloc에는 할당할 메모리 크기가 들어가야 하는데 size_t 변수말고 my_string같은 포인터를 넣음.
+3. 배열 접근도
+        int a = queries[0][i];
+        int b = queries[1][i]; 가 아니라
+
+        int a = queries[i][0];
+        int b = queries[i][1];가 맞음
+
+[][]는 순서대로 세로, 가로니까.
+
+4. 로직도 잘못된것이, 잘 작성했다해도 *(answer + i) = *(my_string + (len - i); 는 길이 양 끝 캐릭터만 자리를 바꾸게 될것이다.
+
+
+<수정>
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h> // str어ㅉㅓ고들은 여기있으니까
+
+char* solution(const char* my_string, int** queries, size_t queries_rows, size_t queries_cols) {
+    int len = strlen(my_string);
+    
+    // 갖고싶은건 문자열이니 +1
+    char* answer = (char*)malloc(sizeof(char) * (len + 1));
+    
+    // 일단 원본을 answer에
+    strcpy(answer, my_string);
+    
+    // 캐릭터 납치, rows만 긁을거라서 사이즈도 rows로
+    for (size_t i = 0; i < queries_rows; i++) {
+        int s = queries[i][0]; // 시작 인덱스
+        int e = queries[i][1]; // 끝 인덱스
+        
+        // 임시공간에 넣고 크로스로 슥슥. random은 mxxxxr -> moxxar -> modnar 이니까 이 방법이 맞다. 
+        while (s < e) {
+            char temp = answer[s];
+            answer[s] = answer[e];
+            answer[e] = temp;
+            
+            s++;
+            e--;
+        }
+    }
+    
+    return answer;
+}
+
+
+
+
+
+
+
+
