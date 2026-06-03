@@ -76,6 +76,68 @@ int가 integer이기때문에 이렇게 선언되면 모두 정수다.
 
 4. strncpy도 제대로 쓰지 못했는데, strncpy는 문자열 맨앞부터 글자 채워넣는다.
 
+--- 설명 ---
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+int* solution(const char* intStrs[], size_t intStrs_len, int k, int s, int l) {
+
+    int* answer = (int*)malloc(sizeof(int) * (intStrs_len));
+    int count = 0;
+    char* temp = (char*)malloc(sizeof(char) * (l + 1));
+
+    for(size_t i = 0; i < intStrs_len; i++){
+        strncpy(temp, intStrs[i] + s, l);
+        temp[l] = '\0'; int num =  atoi(temp);
+
+    if(k < num){answer[count] = num; count++;}}
+
+    free(temp); answer = (int*)realloc(answer, sizeof(int) * count);
+
+    return answer;}
+이거 아까 쓴 코드인데 strncpy(temp, intStrs[i] + s, l); 이거 
+한번만 써서 몰랐지만 세번째 인자에 정해진 위치부터 적는다는게 strncpy(answer, NULL, 1);가 왜 잘못된건지 이제 좀 보인다.
 
 
 
+
+
+
+
+
+
+
+<해결하려면?>
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h> 
+
+char* solution(const char* my_strings[], size_t my_strings_len, int** parts, size_t parts_rows, size_t parts_cols) {
+ 
+    // 최대 100글자씩 100개이므로 최대 10000글자 + 널 문자(\0) 필요.
+    char* answer = (char*)malloc(sizeof(char) * 10001); 
+    
+    size_t j = 0; // answer에 문자를 채워넣을 현재 위치 인덱스
+    
+    // 2. my_strings의 개수만큼 반복
+    for (size_t i = 0; i < my_strings_len; i++) {
+        int s = parts[i][0]; // 시작 인덱스
+        int e = parts[i][1]; // 끝 인덱스
+        int len = e - s + 1; // 잘라낼 문자열의 길이
+        
+        // my_strings[i]의 s번째 주소부터 len만큼 answer의 현재 위치(idx)에 복사
+        strncpy(answer + j, my_strings[i] + s, len);
+        
+        // 복사한 길이만큼 다음 복사 위치를 뒤로 이동
+        j += len;
+    }
+    
+    // 3. 문자열의 맨 마지막에 널 문자('\0')를 넣어 문자열의 끝을 표시
+    answer[j] = '\0';
+    
+    return answer;
+}
