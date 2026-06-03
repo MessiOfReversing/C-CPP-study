@@ -1,0 +1,81 @@
+문제 설명
+
+길이가 같은 문자열 배열 my_strings와 이차원 정수 배열 parts가 매개변수로 주어집니다. parts[i]는 [s, e] 형태로, my_string[i]의 인덱스 s부터 인덱스 e까지의 부분 문자열을 의미합니다. 각 my_strings의 원소의 parts에 해당하는 부분 문자열을 순서대로 이어 붙인 문자열을 return 하는 solution 함수를 작성해 주세요.
+제한사항
+1 ≤ my_strings의 길이 = parts의 길이 ≤ 100
+1 ≤ my_strings의 원소의 길이 ≤ 100
+parts[i]를 [s, e]라 할 때, 다음을 만족합니다.
+0 ≤ s ≤ e < my_strings[i]의 길이
+입출력 예
+my_strings
+["progressive", "hamburger", "hammer", "ahocorasick"]	
+
+
+parts
+[[0, 4], [1, 2], [3, 5], [7, 7]]	
+
+
+result
+"programmers"
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+char* solution(const char* my_strings[], size_t my_strings_len, int** parts, size_t parts_rows, size_t parts_cols) {
+    
+    char* answer = (char*)malloc(sizeof(char) * 101);
+    
+    for(size_t i = 0; i < 2; i++){ 
+        int a[i] = parts[i][0]; int lena = atoi(a[1] - a[0] + 1);
+        int b[i] = parts[i][1]; int lenb = atoi(b[1] - b[0] + 1);
+        int c[i] = parts[i][2]; int lenc = atoi(c[1] - c[0] + 1);
+        int d[i] = parts[i][3]; int lend = atoi(d[1] - d[0] + 1);}
+    for(size_t j = 0; j < my_strings_len; j++){ 
+        strncpy(answer, my_strings[j] + a[0], lena);
+        strncpy(answer, my_strings[j] + b[0], lenb);
+        strncpy(answer, my_strings[j] + c[0], lenc);
+        strncpy(answer, my_strings[j] + d[0], lend);}
+    strncpy(answer, NULL, 1);
+    return answer;}
+
+
+
+
+이게 왜 ㅇ낟님
+
+
+
+
+
+
+왜 안드ㅚ느냐!!
+
+
+
+
+
+이유는 아래ㅗ다 같다!
+
+
+
+1. int a[i] = parts[i][0] 이렇게 변수 자리에도 루프 인덱스를 넣어서 선언하는건 옳지 않아요
+2. atoi는 int lena = atoi(a[1] - a[0] + 1); 이딴식으로 쓰는게 아니란말이다!
+--> 문자열을 정수로 바꾸는 함수인것이지, 이미 정수인 a[1] - a[0] + 1를 왜 넣나? 
+
+---- 정리 ----
+
+문제에서 주어지는 이 parts란것은 변수 선언때 int** parts로 되어있다. 이말은 정수들이 담긴 2차원 배열이라는 의미다!
+
+int가 integer이기때문에 이렇게 선언되면 모두 정수다.
+
+3. 변수 범위가 a, b, c, d 설정에 따라 주어지도록 코드를 작성했는데, 이건 for loop안에서만 존재하고 나오면 소멸한다.
+즉 두번째 for loop에서는 사용 못하니 두번째 loop도 괄호안에 집어넣든지 새로 짜든지 해라
+
+4. strncpy도 제대로 쓰지 못했는데, strncpy는 문자열 맨앞부터 글자 채워넣는다.
+
+
+
+
