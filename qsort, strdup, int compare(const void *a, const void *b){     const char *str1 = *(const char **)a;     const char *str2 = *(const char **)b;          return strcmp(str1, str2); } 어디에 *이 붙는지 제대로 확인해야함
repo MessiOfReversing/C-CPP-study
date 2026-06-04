@@ -169,7 +169,16 @@ char** solution(const char* my_string) {
 
 
 
+그리고
 
+⁠int compare(const void *a, const void *b) {
+    const char *str1 = *(const char **)a;
+    const char *str2 = *(const char **)b;
+
+    return strcmp(str1, str2);
+}
+이런 **를 하는 이유는 qsort⁠ 함수가 비교 함수에 인자를 전달할 때 "배열 요소의 주소(포인터)"를 넘겨주기 때문임.
+정렬하려는 대상이 '문자열 배열(⁠char *⁠의 배열)'이기 때문에, 그 요소의 주소는 **포인터의 포인터(⁠char **⁠)**가 되는것임.
 
 <수정>
 
