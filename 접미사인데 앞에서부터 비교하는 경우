@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+int solution(const char* my_string, const char* is_prefix) {
+
+    int answer = 0;
+    int lenmy = strlen(my_string);
+    int lenpre = strlen(is_prefix);
+
+    if(lenpre > lenmy){return 0;}
+    if(strncmp(my_string, is_prefix, lenpre) == 0){return 1;}
+    else{return 0;}
+}
