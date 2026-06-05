@@ -1,0 +1,109 @@
+문제 설명
+
+알파벳 대소문자로만 이루어진 문자열 my_string이 주어질 때, my_string에서 'A'의 개수, my_string에서 'B'의 개수,..., my_string에서 'Z'의 개수, my_string에서 'a'의 개수, my_string에서 'b'의 개수,..., my_string에서 'z'의 개수를 순서대로 담은 길이 52의 정수 배열을 return 하는 solution 함수를 작성해 주세요.
+제한사항
+1 ≤ my_string의 길이 ≤ 1,000
+입출력 예
+my_string	result
+"Programmers"	
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 
+0, 1, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0]
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+int* solution(const char* my_string) {
+    
+    char cmp_string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    int count = 0;
+    int* answer = (int*)malloc(sizeof(int) * count);
+    int j = 0;
+    for(int i = 0; i < strlen(my_string); i++){
+        if(my_string[i] == cmp_string[j]){
+            count++; answer[j] += 1;}
+        else{j++;}
+    }
+    return answer;
+}
+
+
+틀린풀이다.
+
+왜ㅐㅐ
+
+
+1. char cmp_string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" << 이거 문제인데
+이렇게 여러 글자가 담긴 문자열은 ⁠char⁠가 아니라 문자열 포인터(⁠const char*⁠ 또는 ⁠char[]⁠)로 선언해야함.
+문장 끝에 ⁠;⁠도 없음.
+
+2. 선언했다고 바로 동적할당하면 안됨.
+int count = 0;
+int* answer = (int*)malloc(sizeof(int) * count);
+이러면 0만큼 할당되어버림. 업데이트 안됨.
+문제에서 52로 제한했으니 그냥 52하면됨.
+
+
+이렇게 수정하자.
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+int* solution(const char* my_string) {
+
+    const char* cmp_string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    
+    int* answer = (int*)malloc(sizeof(int) * 52);
+    
+    memset(answer, 0, sizeof(int) * 52);
+    
+    int my_len = strlen(my_string);
+    int cmp_len = strlen(cmp_string); 
+    
+    for(int i = 0; i < my_len; i++) {
+        for(int j = 0; j < cmp_len; j++) {
+            if(my_string[i] == cmp_string[j]) {answer[j]++; break;}
+        }
+    }return answer;}
+
+
+아래처럼 아스키로 봐도 된다. 
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+int* solution(const char* my_string) {
+    // 1. 결과 공간을 담을 길이 52의 배열 동적 할당
+    int* answer = (int*)malloc(sizeof(int) * 52);
+    
+    // 2. 동적 할당된 배열은 쓰레기 값이 들어있으므로 0으로 초기화
+    memset(answer, 0, sizeof(int) * 52);
+    
+    int len = strlen(my_string);
+    
+    // 3. 문자열을 한 글자씩 읽으며 해당하는 인덱스의 카운트 증가
+    for(int i = 0; i < len; i++) {
+        char ch = my_string[i];
+        
+        if(ch >= 'A' && ch <= 'Z') {
+            // 대문자는 0 ~ 25번 인덱스에 저장
+            answer[ch - 'A']++;
+        } 
+        else if(ch >= 'a' && ch <= 'z') {
+            // 소문자는 26 ~ 51번 인덱스에 저장
+            answer[ch - 'a' + 26]++;
+        }
+    }
+    
+    return answer;
+}
+
+
+
