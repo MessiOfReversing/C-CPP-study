@@ -1,0 +1,98 @@
+[문제 설명
+
+문자열 my_string과 정수 s, e가 매개변수로 주어질 때, my_string에서 인덱스 s부터 인덱스 e까지를 뒤집은 
+문자열을 return 하는 solution 함수를 작성해 주세요.
+
+
+
+제한사항
+my_string은 숫자와 알파벳으로만 이루어져 있습니다.
+1 ≤ my_string의 길이 ≤ 1,000
+0 ≤ s ≤ e < my_string의 길이
+입출력 예
+my_string	s	e	result
+"Progra21Sremm3"	6	12	"ProgrammerS123"
+"Stanley1yelnatS"	4	10	"Stanley1yelnatS"]
+
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+char* solution(const char* my_string, int s, int e) {
+    
+    int len = strlen(my_string);
+    
+    char* answer = (char*)malloc(sizeof(char) * len);
+    
+    for(int i = s; i < e; i++){
+        strcpy(answer + i, answer + len - 1 - i);
+    }
+    
+    return answer;
+}
+
+이거 왜 틀렸나?
+
+
+
+
+1. len+1크기로 할당해서 null 공간 확보해야한다. 원하는건 문자열이니 당연함.
+2. strcpy⁠는 문자 하나가 아니라 문자열을 복사하는 함수. 그래서 ⁠answer + i⁠ 위치에 다른 위치의 문자열 전체를 덮어쓰려고 하면 데이터가 다 깨지게 됨.
+--> 로직도 이상한데, 인덱스 계산 방식(⁠len - 1 - i⁠)을 보면  
+전체 문자열을 뒤집는 게 아니라 ⁠s⁠부터 ⁠e⁠까지의 구간만 뒤집어야 하므로, 대칭점의 위치는 ⁠e - (i - s)⁠가 되어야함.
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+char* solution(const char* my_string, int s, int e) {
+    int len = strlen(my_string);
+    
+    char* answer = (char*)malloc(sizeof(char) * (len + 1));
+    
+    strcpy(answer, my_string);
+    
+    int start = s;
+    int end = e;
+    while (start < end) {
+        char temp = answer[start];
+        answer[start] = answer[end];
+        answer[end] = temp;
+        
+        start++; end--;
+    }
+    
+    return answer;
+}
+
+이렇게 하자.
+
+
+
+
+
+
+
+
+부분적으로 뒤집는 템플릿
+
+int start = s;
+    int end = e;
+    while (start < end) {
+        char temp = answer[start];
+        answer[start] = answer[end];
+        answer[end] = temp;
+        
+        start++; end--;
+    }
+이거 기억
