@@ -1,0 +1,64 @@
+배열에 더하자
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int n, int k) {
+   
+    int* answer = (int*)malloc(sizeof(int) * (n / k));
+    
+    int i = 0; int j = 1;
+    while(i <= (n / k)){
+        answer[i] = k * j; i++; j++;}
+    return answer;
+}
+
+
+
+이건 n = 3, k = 1 이라면 3만큼 공간 생긴 [0][1][2]에 [3]이 모자라게됨
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int n, int k) {
+
+    int* answer = (int*)malloc(sizeof(int) * (n / k + 1));
+
+    int i = 0; int j = 1;
+    while(i <= (n / k)){
+        answer[i] = k * j; i++; j++;}
+    return answer;
+}
+
+
+이렇게 해도되고
+
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int* solution(int n, int k) {
+    // 1부터 n까지 k의 배수의 개수는 정확히 n / k 개입니다.
+    int count = n / k;
+    
+    // 정확한 개수만큼 메모리 할당
+    int* answer = (int*)malloc(sizeof(int) * count);
+    
+    // i는 0부터 count - 1까지 증가하며 배열의 인덱스로 사용됩니다.
+    for (int i = 0; i < count; i++) {
+        // i가 0일 때 (0 + 1) * k = k
+        // i가 1일 때 (1 + 1) * k = 2k ...
+        answer[i] = k * (i + 1);
+    }
+    
+    return answer;
+}
+
+
+이것도 됩니다잉
