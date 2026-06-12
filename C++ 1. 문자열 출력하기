@@ -1,0 +1,157 @@
+#include <iostream>
+#include <string>
+
+int main() {
+    // 입출력 속도를 높이기 위한 최적화
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+
+    std::string str;
+    
+    // 문자열 입력 받기
+    std::cin >> str;
+    
+    // 문자열 출력하기
+    std::cout << str;
+
+    return 0;
+}
+
+
+
+// 또 다른 풀이
+
+
+
+#include <iostream>
+#include <cstdio>
+#include <cassert>
+#include <cstring>
+#include <string>
+#include <type_traits> // Type traits 추가
+
+using namespace std;
+
+class FastIO {
+    static constexpr int MAX_SIZE = 1 << 20; // 1MB 정도로 버퍼 확장
+    char i_buffer[MAX_SIZE], *pb = i_buffer, *pe = i_buffer;
+    char o_buffer[MAX_SIZE], *pf = o_buffer; // 출력 버퍼도 char 배열로 변경
+    string word;
+    bool state;
+    char delimiter;
+
+private:
+    inline char sys_getchar() { 
+        return pb == pe && (pe = (pb = i_buffer) + fread(i_buffer, 1, MAX_SIZE, stdin), pb == pe) ? (state = false) : *pb++; 
+    }
+    inline bool isspace2(int c) { return (c >= 9 && c <= 13) || c == 32; }
+    inline bool isdigit2(int c) { return c >= '0' && c <= '9'; }
+
+    inline int lowercmp(const char* s1, const char* s2) {
+        while (*s1 && *s2 && tolower(*s1) == tolower(*s2)) ++s1, ++s2;
+        return *s1 - *s2;
+    }
+    inline bool next_bool() {
+        const char* s = next_word().c_str();
+        return !lowercmp(s, "true") ? true : (!lowercmp(s, "false") ? false : atoll(s));
+    }
+    inline char next_char(char src) {
+        char c;
+        while (isspace2(c = sys_getchar())) {}
+        return c ? c : src;
+    }
+    inline const string& next_word() {
+        char c; word.clear();
+        while (isspace2(c = sys_getchar())) {}
+        while (!isspace2(c) && c) { word += c, c = sys_getchar(); }
+        return word;
+    }
+    inline long long next_llong() {
+        long long ll = 0, sign = 1; char c;
+        while ((c = sys_getchar()) && isspace2(c)) {}
+        if (c == '+' || c == '-') { sign = -(c - ','), c = sys_getchar(); }
+        while (isdigit2(c)) { ll = (ll << 1) + (ll << 3) + (c ^ 48), c = sys_getchar(); }
+        while (!isspace2(c) && c) { c = sys_getchar(); }
+        return ll * sign;
+    }
+    inline unsigned long long next_ullong() {
+        unsigned long long ull = 0; char c;
+        while ((c = sys_getchar()) && isspace2(c)) {}
+        while (isdigit2(c)) { ull = (ull << 1) + (ull << 3) + (c ^ 48), c = sys_getchar(); }
+        while (!isspace2(c) && c) { c = sys_getchar(); }
+        return ull;
+    }
+
+    // 내부 출력 버퍼 비우기 함수
+    inline void flush() {
+        if (pf != o_buffer) {
+            fwrite(o_buffer, 1, pf - o_buffer, stdout);
+            pf = o_buffer;
+        }
+    }
+
+public:
+    inline void setdelimiter(int c) { delimiter = c; }
+
+    FastIO() : state(true), delimiter(' ') {}
+    ~FastIO() { flush(); } // 소멸자에서 남은 버퍼 밀어내기
+
+    // 입력 연산자 오버로딩
+    FastIO& operator>>(bool& b)       { b = next_bool();                return *this; }
+    FastIO& operator>>(char& c)       { c = next_char(c);               return *this; }
+    FastIO& operator>>(char* s)       { strcpy(s, next_word().c_str()); return *this; }
+    FastIO& operator>>(string& s)     { s = next_word();                return *this; }
+    FastIO& operator>>(double& d)     { d = atof(next_word().c_str());  return *this; }
+    FastIO& operator>>(float& f)      { f = atof(next_word().c_str());  return *this; }
+    FastIO& operator>>(long long& ll) { ll = next_llong(); return *this; }
+    FastIO& operator>>(long& l)       { l = next_llong();  return *this; }
+    FastIO& operator>>(int& i)        { i = next_llong();  return *this; }
+    FastIO& operator>>(short& sh)     { sh = next_llong(); return *this; }
+    FastIO& operator>>(unsigned long long& ull) { ull = next_ullong(); return *this; }
+    FastIO& operator>>(unsigned long& ul)       { ul = next_ullong();  return *this; }
+    FastIO& operator>>(unsigned int& ui)        { ui = next_ullong();  return *this; }
+    FastIO& operator>>(unsigned short& ush)     { ush = next_ullong(); return *this; }
+
+    // 벡터나 배열 같은 컨테이너 입력 처리용 템플릿
+    template <typename T>
+    FastIO& operator>>(T& container) { for (auto& e : container) { *this >> e; } return *this; }
+
+    // 출력 연산자 오버로딩 (버퍼 가득 차면 flush)
+    FastIO& operator<<(char c) { 
+        if (pf == o_buffer + MAX_SIZE) flush();
+        *pf++ = c; 
+        return *this; 
+    }
+    FastIO& operator<<(const char* s)   { while (*s) { *this << *s++; } return *this; }
+    FastIO& operator<<(const string& s) { for (char c : s) { *this << c; } return *this; }
+    
+    // 기본 자료형 출력
+    FastIO& operator<<(bool b)          { return (b ? *this << "true" : *this << "false"); }
+    FastIO& operator<<(double d)        { return *this << to_string(d);  }
+    FastIO& operator<<(float f)         { return *this << to_string(f);  }
+    FastIO& operator<<(long long ll)    { return *this << to_string(ll); }
+    FastIO& operator<<(long l)          { return *this << to_string(l);  }
+    FastIO& operator<<(int i)           { return *this << to_string(i);  }
+    FastIO& operator<<(short sh)        { return *this << to_string(sh); }
+    FastIO& operator<<(unsigned long long ull) { return *this << to_string(ull); }
+    FastIO& operator<<(unsigned long ul)       { return *this << to_string(ul);  }
+    FastIO& operator<<(unsigned int ui)        { return *this << to_string(ui);  }
+    FastIO& operator<<(unsigned short ush)     { return *this << to_string(ush); }
+
+    // 컨테이너 출력용 템플릿 (의도치 않은 문자열 매칭 방지를 위해 sfinae나 조건 분기 적용 가능하나, 여기선 기본형만 매칭되도록 구성)
+    template <typename T>
+    FastIO& operator<<(const T& container) {
+        for (auto& e : container) { *this << e << delimiter; }
+        return *this;
+    }
+
+    operator bool() { return state; }
+} fio;
+
+int main(void) {
+    string s;
+    if (fio >> s) { // 입력이 성공했을 때만 출력하도록 방어적 코드 작성
+        fio << s;
+    }
+    return 0;
+}
