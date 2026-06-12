@@ -1,0 +1,86 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string str1, string str2) {
+    int len1 = str.length(str1);
+    int len2 = str.length(str2);
+    for(int i = 0; i < (len1 + len2) / 2; i++){
+        answer = str1[i] << str2[i] << "";
+    } return answer;
+}
+
+
+
+될리가 없다.
+
+
+
+수정
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string str1, string str2) {
+    string answer = "";
+    
+    // 문제 조건에서 두 문자열의 길이는 같으므로 str1.length()를 사용합니다.
+    for(int i = 0; i < str1.length(); i++) {
+        answer += str1[i]; // str1의 i번째 문자를 추가
+        answer += str2[i]; // str2의 i번째 문자를 추가
+    }
+    
+    return answer;
+}
+
++=를 변수에 문자 추가하는데에 쓴다. 
+그리고 따로 int len하지 않아도 str1.length();로 해결 가능하다.
+
+
+
+
++=⁠ 연산자: 문자뿐만 아니라 문자열 전체를 뒤에 붙일 때도 사용할 수 있어 활용도가 높습니다. (가장 흔하게 사용됩니다.)
+push_back⁠: **단 하나의 문자(char)**만 추가할 때 사용합니다. 코드상에서 "나는 문자를 하나씩 넣고 있다"는 의도를 명확하게 보여줄 수 있습니다.
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string str1, string str2) {
+    string answer = "";
+
+    for(int i=0; i<str1.length(); i++)
+    {
+        answer.push_back(str1[i]);
+        answer.push_back(str2[i]);
+    }
+    return answer;
+}
+도 가능한 이유.
+
+
+
+
+
+
+
+<<⁠는 화면 출력용이고, ⁠=⁠은 값 대입용
+
+
+int a = 10;          // a라는 상자에 10을 넣음
+string s = "hello";  // s라는 상자에 "hello"를 넣음
+
+cout << "안녕";  // "안녕"이라는 데이터를 화면(cout)으로 보냄
+cout << a;       // a에 담긴 값을 화면으로 보냄
+
+string answer = "";      // 1. 빈 그릇 준비 (=)
+answer += 'a';           // 2. 그릇에 'a'를 담음 (+=)
+answer += 'b';           // 3. 그릇에 'b'를 추가함 (+=)
+
+cout << answer;          // 4. 완성된 그릇의 내용을 화면에 출력 (<<)
+
+
