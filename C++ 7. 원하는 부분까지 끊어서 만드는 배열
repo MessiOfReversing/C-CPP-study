@@ -1,0 +1,97 @@
+문제 설명
+
+문자열 리스트 str_list에는 "u", "d", "l", "r" 네 개의 문자열이 여러 개 저장되어 있습니다. str_list에서 "l"과 "r" 중 먼저 나오는 문자열이 "l"이라면 해당 문자열을 기준으로 왼쪽에 있는 문자열들을 순서대로 담은 리스트를, 먼저 나오는 문자열이 "r"이라면 해당 문자열을 기준으로 오른쪽에 있는 문자열들을 순서대로 담은 리스트를 return하도록 solution 함수를 완성해주세요. "l"이나 "r"이 없다면 빈 리스트를 return합니다.
+제한사항
+1 ≤ str_list의 길이 ≤ 20
+str_list는 "u", "d", "l", "r" 네 개의 문자열로 이루어져 있습니다.
+입출력 예
+str_list	result
+["u", "u", "l", "r"]	["u", "u"]
+["l"]	[]
+
+
+
+
+
+
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> solution(vector<string> str_list) {
+    vector<string> answer;
+    for(int i = 0; i < str_list.size(); i++){
+        if(str_list[i] != "l" && str_list[i] != "r"){
+            return answer;
+        }
+    }
+    auto lishere = find(str_list.begin(), str_list.end(), "l");
+    auto rishere = find(str_list.begin(), str_list.end(), "r");
+    if(lishere < rishere){
+        return vector<int>(str_list.begin(), lishere);
+    }
+    else{
+        return vector<int>(rishere + 1, str_list.end());
+    }
+}
+
+
+
+
+
+이거 안되는 이유가 뭘까요
+
+
+1.
+for(int i = 0; i < str_list.size(); i++){
+    if(str_list[i] != "l" && str_list[i] != "r"){
+        return answer;
+    }
+}
+이 반복문은 리스트의 첫 번째 원소부터 확인하다가 ⁠"l"⁠이나 ⁠"r"⁠이 아니면 바로 빈 리스트(⁠answer⁠)를 반환해 버립니다.
+예제 1번 ⁠["u", "u", "l", "r"]⁠을 보면, 첫 원소가 ⁠"u"⁠이기 때문에 ⁠"l"⁠도 ⁠"r"⁠도 아닙니다. 
+따라서 이 반복문 조건에 걸려 뒤는 보지도 않고 곧바로 빈 리스트를 리턴하게 됩니다.
+
+
+
+2."l"⁠이나 ⁠"r"⁠이 리스트에 없을 때의 예외 처리 누락
+⁠std::find⁠는 값을 찾지 못하면 ⁠str_list.end()⁠를 반환합니다.
+만약 둘 다 없을 경우 ⁠lishere⁠와 ⁠rishere⁠ 모두 ⁠str_list.end()⁠가 되어 ⁠lishere < rishere⁠ 조건이 거짓(⁠else⁠로 이동)이 됩니다. 
+결국 원하지 않는 엉뚱한 범위가 반환되거나 에러가 날 수 있습니다.
+
+
+
+3. 반환을 int로 해버림.
+return vector<int>(str_list.begin(), lishere);
+이거.
+
+
+
+수정...
+
+
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<string> solution(vector<string> str_list) {
+    vector<string> answer;
+    
+    for (int i = 0; i < str_list.size(); i++) {
+        // 0부터 i-1까지
+        if (str_list[i] == "l") {
+            return vector<string>(str_list.begin(), str_list.begin() + i);
+        }
+        // i+1부터 끝까지
+        if (str_list[i] == "r") {
+            return vector<string>(str_list.begin() + i + 1, str_list.end());
+        }
+    }
+    
+    // 3. 반복문을 다 돌 때까지 "l"이나 "r"이 없었다면 빈 리스트 반환
+    return answer;
+}
